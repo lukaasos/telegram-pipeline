@@ -45,6 +45,3 @@ token = getpass()
 
 **Nota**: Para testar a função com evento do próprio `AWS Lambda`, substitua o código `message = json.loads(event["body"])` por `message = event`. Lembre-se que o primeiro só faz sentido na integração com o `AWS API Gateway`. O códigoestá disponível em aws_lambda.ipynb
 
-
-
-

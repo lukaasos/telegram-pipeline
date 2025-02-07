@@ -8,8 +8,6 @@
 
 4 Apresentação
 
-5 Storytelling
-
 ![Texto alternativo](https://github.com/lukaasos/telegram-pipeline/blob/main/imagens/Profissao%20Analista%20de%20dados%20M42%20Material%20de%20apoio%20arch.png)
 
 

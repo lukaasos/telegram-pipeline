@@ -24,7 +24,7 @@
 
 > 2 - Crie um bot no telegram com o botfather.
 
-![Texto alternativo]([https://github.com/lukaasos/telegram-pipeline/blob/main/imagens/Profissao%20Analista%20de%20dados%20M42%20Material%20de%20apoio%20arch.png](https://github.com/lukaasos/telegram-pipeline/blob/main/imagens/botfather.png))
+![BotFather](https://github.com/lukaasos/telegram-pipeline/blob/main/imagens/botfather.png)
 
 > 3 - Crie um grupo e adicione o bot
 

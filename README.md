@@ -69,7 +69,11 @@ A etapa de **extração, transformação e carregamento (ETL, do inglês *extrac
 
 > 3.3. Crie uma regra no `AWS Event Bridge` para executar a função do `AWS Lambda` todo dia a meia noite no horário de Brasília (GMT-3).
 
-4 Apresentação
+## 4 Apresentação
+
+Na etapa de **apresentação**, os dados serão exibidos por meio da interface SQL para análise. Essa interface é apresentada em uma tabela externa, acessando os dados que estão armazenados na camada mais refinada da arquitetura, conhecida como camada enriquecida.
+
+> 4.1 AWS Athena
 
 ```sql
 CREATE EXTERNAL TABLE `telegram`(
@@ -91,4 +95,95 @@ OUTPUTFORMAT
   'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
 LOCATION
   's3://<bucket-enriquecido>/'
+```
+
+Por fim, adicione as partições disponíveis.
+
+> **Importante**: Toda vez que uma nova partição é adicionada ao repositório de dados, é necessário informar o `AWS Athena` para que a ela esteja disponível via SQL. Para isso, use o comando SQL `MSCK REPAIR TABLE <nome-tabela>` para todas as partições (mais caro) ou `ALTER TABLE <nome-tabela> ADD PARTITION <coluna-partição> = <valor-partição>` para uma única partição (mais barato), documentação neste [link](https://docs.aws.amazon.com/athena/latest/ug/alter-table-add-partition.html)).
+
+```sql
+MSCK REPAIR TABLE `telegram`;
+```
+E consulte as 10 primeiras linhas para observar o resultado.
+
+```sql
+SELECT * FROM `telegram` LIMIT 10;
+```
+
+> 4.3 Analytics
+
+- Quantidade de mensagens por dia.
+
+```sql
+SELECT 
+  context_date, 
+  count(1) AS "message_amount" 
+FROM "telegram" 
+GROUP BY context_date 
+ORDER BY context_date DESC
+```
+
+- Quantidade de mensagens por usuário por dia.
+
+```sql
+SELECT 
+  user_id, 
+  user_first_name, 
+  context_date, 
+  count(1) AS "message_amount" 
+FROM "telegram" 
+GROUP BY 
+  user_id, 
+  user_first_name, 
+  context_date 
+ORDER BY context_date DESC
+```
+
+- Média do tamanho das mensagens por usuário por dia.
+
+```sql
+SELECT 
+  user_id, 
+  user_first_name, 
+  context_date,
+  CAST(AVG(length(text)) AS INT) AS "average_message_length" 
+FROM "telegram" 
+GROUP BY 
+  user_id, 
+  user_first_name, 
+  context_date 
+ORDER BY context_date DESC
+```
+
+- Quantidade de mensagens por hora por dia da semana por número da semana.
+
+```sql
+WITH 
+parsed_date_cte AS (
+    SELECT 
+        *, 
+        CAST(date_format(from_unixtime("date"),'%Y-%m-%d %H:%i:%s') AS timestamp) AS parsed_date
+    FROM "telegram" 
+),
+hour_week_cte AS (
+    SELECT
+        *,
+        EXTRACT(hour FROM parsed_date) AS parsed_date_hour,
+        EXTRACT(dow FROM parsed_date) AS parsed_date_weekday,
+        EXTRACT(week FROM parsed_date) AS parsed_date_weeknum
+    FROM parsed_date_cte
+)
+SELECT
+    parsed_date_hour,
+    parsed_date_weekday,
+    parsed_date_weeknum,
+    count(1) AS "message_amount" 
+FROM hour_week_cte
+GROUP BY
+    parsed_date_hour,
+    parsed_date_weekday,
+    parsed_date_weeknum
+ORDER BY
+    parsed_date_weeknum,
+    parsed_date_weekday
 ```

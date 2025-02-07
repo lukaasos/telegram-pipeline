@@ -30,12 +30,12 @@
 
 > 6 - Envie mensagens no grupo e consuma utilizando a API de bots do **Telegram**.
 
-
+```
 # A biblioteca getpass permite que você utilize senhas ou dados sensíveis de forma segura
-
 from getpass import getpass
 
 token = getpass()
+```
 
 ## 2 Ingestão
 

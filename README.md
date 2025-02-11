@@ -103,6 +103,8 @@ Por fim, adicione as partições disponíveis.
 
 > **Importante**: Toda vez que uma nova partição é adicionada ao repositório de dados, é necessário informar o `AWS Athena` para que a ela esteja disponível via SQL. Para isso, use o comando SQL `MSCK REPAIR TABLE <nome-tabela>` para todas as partições (mais caro) ou `ALTER TABLE <nome-tabela> ADD PARTITION <coluna-partição> = <valor-partição>` para uma única partição (mais barato), documentação neste [link](https://docs.aws.amazon.com/athena/latest/ug/alter-table-add-partition.html)).
 
+![query1](https://raw.githubusercontent.com/lukaasos/telegram-pipeline/main/imagens/query1.png)
+
 ```sql
 MSCK REPAIR TABLE `telegram`;
 ```

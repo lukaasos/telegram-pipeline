@@ -108,11 +108,16 @@ Por fim, adicione as partições disponíveis.
 ```sql
 MSCK REPAIR TABLE `telegram`;
 ```
+
+![query2](https://raw.githubusercontent.com/lukaasos/telegram-pipeline/main/imagens/query2.png)
+
 E consulte as 10 primeiras linhas para observar o resultado.
 
 ```sql
 SELECT * FROM `telegram` LIMIT 10;
 ```
+
+![query3](https://raw.githubusercontent.com/lukaasos/telegram-pipeline/main/imagens/query3.png)
 
 > 4.3 Analytics
 
@@ -126,6 +131,8 @@ FROM "telegram"
 GROUP BY context_date 
 ORDER BY context_date DESC
 ```
+
+![query5](https://raw.githubusercontent.com/lukaasos/telegram-pipeline/main/imagens/query5.png)
 
 - Quantidade de mensagens por usuário por dia.
 
@@ -143,6 +150,8 @@ GROUP BY
 ORDER BY context_date DESC
 ```
 
+![query6](https://raw.githubusercontent.com/lukaasos/telegram-pipeline/main/imagens/query6.png)
+
 - Média do tamanho das mensagens por usuário por dia.
 
 ```sql
@@ -158,6 +167,8 @@ GROUP BY
   context_date 
 ORDER BY context_date DESC
 ```
+
+![query7](https://raw.githubusercontent.com/lukaasos/telegram-pipeline/main/imagens/query7.png)
 
 - Quantidade de mensagens por hora por dia da semana por número da semana.
 
@@ -191,3 +202,5 @@ ORDER BY
     parsed_date_weeknum,
     parsed_date_weekday
 ```
+
+![query8](https://raw.githubusercontent.com/lukaasos/telegram-pipeline/main/imagens/query8.png)
